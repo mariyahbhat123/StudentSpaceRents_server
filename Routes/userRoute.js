@@ -61,4 +61,54 @@ router.post(
   }
 );
 
+//Login validation
+
+router.post(
+  "/loginUsers",
+  [body("email").isLength({ max: 10 }), body("password").isLength({ max: 10 })],
+  async (req, res) => {
+    let email = req.body.email;
+    console.log(email);
+
+    const error = validationResult(req);
+    if (error.isEmpty()) {
+      return res.status(400).json({ error: error.array() });
+    }
+
+    try {
+      let userData = await userModel.findOne({ email });
+      console.log(userData);
+      if (!userData) {
+        return res
+          .status(400)
+          .json({ error: "Try logging with correct credentials" });
+      }
+
+      const pwdCompare = await bcrypt.compare(
+        req.body.password,
+        userData.password
+      );
+
+      if (!pwdCompare) {
+        return res
+          .status(400)
+          .json({ error: "Try logging with correct credentials" });
+      } else {
+        const data = {
+          users: {
+            id: userData._id,
+            name: userData.name,
+            email: userData.email,
+          },
+        };
+        const authToken = jwt.sign(data, jwtSecret);
+        return res.json({ success: true, authToken });
+      }
+    } catch (err) {
+      console.log(err);
+      res.json({ success: false });
+    }
+  }
+);
+
 module.exports = router;

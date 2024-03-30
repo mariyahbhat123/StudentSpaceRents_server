@@ -65,13 +65,13 @@ router.post(
 
 router.post(
   "/loginUsers",
-  [body("email").isLength({ max: 10 }), body("password").isLength({ max: 10 })],
+  [body("email").isEmail(), body("password").isLength({ max: 10 })],
   async (req, res) => {
     let email = req.body.email;
     console.log(email);
 
     const error = validationResult(req);
-    if (error.isEmpty()) {
+    if (!error.isEmpty()) {
       return res.status(400).json({ error: error.array() });
     }
 
@@ -102,7 +102,7 @@ router.post(
           },
         };
         const authToken = jwt.sign(data, jwtSecret);
-        return res.json({ success: true, authToken });
+        return res.json({ success: true, authToken, userData });
       }
     } catch (err) {
       console.log(err);

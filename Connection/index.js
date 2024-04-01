@@ -20,6 +20,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api", require("../Routes/userRoute"));
+app.use("/api", require("../Routes/ownerRoute"));
 
 app.listen(PORT, () => {
   db((err) => {

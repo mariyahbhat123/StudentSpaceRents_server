@@ -111,4 +111,16 @@ router.post(
   }
 );
 
+router.post("/authApi", async (req, res) => {
+  let token = req.body.token;
+
+  if (token) {
+    const decode = jwt.verify(token, jwtSecret);
+
+    res.json({ login: true, data: decode });
+  } else {
+    res.json({ login: false, data: "error" });
+  }
+});
+
 module.exports = router;

@@ -1,6 +1,13 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
+const amenities = new Schema({
+  heatingAndCoolingSystem: { type: Boolean },
+  storageSpace: { type: Boolean },
+  internetAndCableServices: { type: Boolean },
+  Furnished: { type: Boolean },
+});
+
 const propertyDetailsModel = new Schema(
   {
     img: { type: String, require: true },
@@ -14,6 +21,8 @@ const propertyDetailsModel = new Schema(
     landmark: { type: String },
     district: { type: String, require: true },
     monthlyRent: { type: Number, require: true },
+    amenities: { amenities },
+    coordinates: { type: [Number, Number], require: true },
     description: { type: String },
     Date: { type: Date, default: Date.now() },
   },

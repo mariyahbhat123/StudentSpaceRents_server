@@ -8,9 +8,14 @@ const amenities = new Schema({
   Furnished: { type: Boolean },
 });
 
+const foodIncluded = new Schema({
+  breakfast: { type: Boolean },
+  lunch: { type: Boolean },
+  dinner: { type: Boolean },
+});
 const propertyDetailsModel = new Schema(
   {
-    img: { type: String, require: true },
+    img0: { type: String, require: true },
     img1: { type: String },
     img2: { type: String },
     img3: { type: String },
@@ -22,6 +27,7 @@ const propertyDetailsModel = new Schema(
     district: { type: String, require: true },
     monthlyRent: { type: Number, require: true },
     amenities: { amenities },
+    foodIncluded: { foodIncluded },
     coordinates: { type: [Number, Number], require: true },
     description: { type: String },
     Date: { type: Date, default: Date.now() },

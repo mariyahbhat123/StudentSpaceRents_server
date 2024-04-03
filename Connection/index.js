@@ -21,6 +21,7 @@ app.use((req, res, next) => {
 
 app.use("/api", require("../Routes/userRoute"));
 app.use("/api", require("../Routes/ownerRoute"));
+app.use("/api", require("../Routes/addPropertyRoute"));
 
 app.listen(PORT, () => {
   db((err) => {

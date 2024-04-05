@@ -102,7 +102,13 @@ router.post(
           },
         };
         const authToken = jwt.sign(data, jwtSecret);
-        return res.json({ success: true, authToken, userData });
+        const userDetail = {
+          name: userData.name,
+          email: userData.email,
+          gender: userData.gender,
+          img: userData.img,
+        };
+        return res.json({ success: true, authToken, userDetail });
       }
     } catch (err) {
       console.log(err);

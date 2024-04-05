@@ -95,8 +95,14 @@ router.post(
           email: ownerData.email,
           number: ownerData.number,
         };
+
+        const ownerDetail = {
+          name: ownerData.name,
+          email: ownerData.email,
+          img: ownerData.img,
+        };
         const ownerAuthToken = jwt.sign(data, jwtSecretOwner);
-        return res.json({ success: true, ownerAuthToken, ownerData });
+        return res.json({ success: true, ownerAuthToken, ownerDetail });
       }
     } catch (err) {
       console.log(err);

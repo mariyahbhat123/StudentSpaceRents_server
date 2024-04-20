@@ -6,19 +6,6 @@ const jwt = require("jsonwebtoken");
 const adminModel = require("../Models/adminModel");
 const jwtSecretAdmin = "HELLOMYNAMEWISHEYYDH";
 
-const createDefaultAdmin = async () => {
-  const adminData = await adminModel.findOne({ email });
-  if (adminData.email) {
-    return console.log("already a user");
-  } else {
-    await adminModel.create({
-      name: "Mariyah",
-      email: "mariyahbhat121@gmail.com",
-      password: "helpingAdmin",
-    });
-  }
-};
-
 router.post("/loginAdmin", async (req, res) => {
   let email = req.body.email;
   console.log(email);
@@ -49,12 +36,12 @@ router.post("/loginAdmin", async (req, res) => {
           email: adminData.email,
         },
       };
-      const authToken = jwt.sign(data, jwtSecretAdmin);
+      const adminAuthToken = jwt.sign(data, jwtSecretAdmin);
       const adminDetail = {
         name: adminData.name,
         email: adminData.email,
       };
-      return res.json({ success: true, authToken, adminDetail });
+      return res.json({ success: true, adminAuthToken, adminDetail });
     }
   } catch (err) {
     console.log(err);
@@ -62,5 +49,16 @@ router.post("/loginAdmin", async (req, res) => {
   }
 });
 
+router.post("/adminAuthApi", async (req, res) => {
+  let token = req.body.token;
+
+  if (token) {
+    const decode = jwt.verify(token, jwtSecretAdmin);
+
+    res.json({ login: true, data: decode });
+  } else {
+    res.json({ login: false, data: "error" });
+  }
+});
+
 module.exports = router;
-module.exports = createDefaultAdmin;

@@ -23,7 +23,6 @@ app.use("/api", require("../Routes/userRoute"));
 app.use("/api", require("../Routes/ownerRoute"));
 app.use("/api", require("../Routes/addPropertyRoute"));
 app.use("/api", require("../Routes/adminRoute"));
-app.use(require("../Routes/adminRoute"));
 
 app.listen(PORT, () => {
   db((err) => {

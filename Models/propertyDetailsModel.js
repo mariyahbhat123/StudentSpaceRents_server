@@ -1,18 +1,18 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
-const amenities = new Schema({
-  heatingAndCoolingSystem: { type: Boolean },
-  storageSpace: { type: Boolean },
-  internetAndCableServices: { type: Boolean },
-  Furnished: { type: Boolean },
-});
+// const amenities = new Schema({
+//   heatingAndCoolingSystem: { type: Boolean },
+//   storageSpace: { type: Boolean },
+//   internetAndCableServices: { type: Boolean },
+//   Furnished: { type: Boolean },
+// });
 
-const foodIncluded = new Schema({
-  breakfast: { type: Boolean },
-  lunch: { type: Boolean },
-  dinner: { type: Boolean },
-});
+// const foodIncluded = new Schema({
+//   breakfast: { type: Boolean },
+//   lunch: { type: Boolean },
+//   dinner: { type: Boolean },
+// });
 const propertyDetailsModel = new Schema(
   {
     img0: { type: String, require: true },
@@ -26,9 +26,22 @@ const propertyDetailsModel = new Schema(
     landmark: { type: String },
     district: { type: String, require: true },
     monthlyRent: { type: Number, require: true },
-    amenities: { amenities },
-    foodIncluded: { foodIncluded },
-    coordinates: { type: [Number, Number], require: true },
+    amenities: {
+      heatingAndCoolingSystem: { type: Boolean },
+      storageSpace: { type: Boolean },
+      internetAndCableServices: { type: Boolean },
+      Furnished: { type: Boolean },
+    },
+    foodIncluded: {
+      breakfast: { type: Boolean },
+      lunch: { type: Boolean },
+      dinner: { type: Boolean },
+    },
+    coordinates: {
+      lat: { type: Number, require: true },
+      lng: { type: Number, require: true },
+    },
+    for: { type: String, require: true },
     description: { type: String },
     Date: { type: Date, default: Date.now() },
   },

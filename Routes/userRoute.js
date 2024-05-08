@@ -129,4 +129,14 @@ router.post("/authApi", async (req, res) => {
   }
 });
 
+router.post("/usersLength", async (req, res) => {
+  try {
+    const userData = await userModel.find({});
+    return res.status(200).json({ success: true, userData: userData });
+  } catch (err) {
+    console.log(err);
+    return res.send({ success: false });
+  }
+});
+
 module.exports = router;

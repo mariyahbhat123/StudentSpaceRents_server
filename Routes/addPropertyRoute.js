@@ -107,19 +107,20 @@ router.post(
   }
 );
 
-router.post("/propertyData", (req, res) => {
+router.post("/propertyData", async (req, res) => {
   try {
-    res.send(propertyDetails);
-    console.log(propertyDetails);
+    const propertyData = await propertyDetail.find({});
+    res.send(propertyData);
+    console.log(propertyData);
   } catch (error) {
     console.error(error.message);
     res.send("Server error");
   }
 });
 
-router.post("/propertyData/:id", async (req, res) => {
+router.post("/propertyData/:propertyID", async (req, res) => {
   try {
-    const propertyId = req.params.id;
+    const propertyId = req.params.propertyID;
     const propertyData = await propertyDetail.findById({ _id: propertyId });
 
     return res.status(200).json({
@@ -128,6 +129,29 @@ router.post("/propertyData/:id", async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.send({ success: false });
+  }
+});
+
+router.delete("/deleteProperty/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const propertyDelete = await propertyDetail.findByIdAndDelete({ _id: id });
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    res.send({ success: false, message: "Deleted Successfully" });
+  }
+});
+
+router.post("/ownerPropertyList/:ownerEmail", async (req, res) => {
+  try {
+    const email = req.params.ownerEmail;
+    const ownerProperty = await propertyDetail.find({ ownerEmail: email });
+    return res.status(200).json({
+      success: true,
+      ownerProperty: ownerProperty,
+    });
+  } catch (err) {
     res.send({ success: false });
   }
 });

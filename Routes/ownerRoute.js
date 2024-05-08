@@ -111,6 +111,15 @@ router.post(
   }
 );
 
+router.post("/ownersLength", async (req, res) => {
+  try {
+    const ownerData = await ownerModel.find({});
+    return res.status(200).json({ success: true, ownerData: ownerData });
+  } catch (err) {
+    return res.send({ success: false });
+  }
+});
+
 router.post("/ownerAuthApi", async (req, res) => {
   let token = req.body.token;
 

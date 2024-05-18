@@ -155,4 +155,20 @@ router.post("/ownerPropertyList/:ownerEmail", async (req, res) => {
     res.send({ success: false });
   }
 });
+
+router.post("/propertyDataFilter/:propertyTypes/:fors", async (req, res) => {
+  try {
+    const propertyType = req.params.propertyTypes;
+    const fors = req.params.fors;
+
+    const filtered = await propertyDetail.find({
+      propertyType: propertyType,
+      for: fors,
+    });
+    console.log(filtered);
+    return res.status(200).json({ success: true, filtered: filtered });
+  } catch (err) {
+    res.send({ success: false });
+  }
+});
 module.exports = router;

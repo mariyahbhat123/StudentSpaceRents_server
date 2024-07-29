@@ -17,7 +17,7 @@ router.post(
   ],
   async (req, res) => {
     const errors = validationResult(req);
-    if (!errors) {
+    if (!errors.isEmpty()) {
       return res.status(400).json({ error: errors.array() });
     }
 
@@ -37,23 +37,31 @@ router.post(
       const existingNumber = await ownerModel.findOne({ number });
 
       if (existingEmail) {
-        return res.status(400).json({ msg: "Email already exists" });
+        return res.status(400).json({
+          msg: "User with the same email already exists",
+          error: "emailExist",
+        });
       }
       if (existingNumber) {
-        return res.status(400).json({ msg: "Number already exists" });
+        return res
+          .status(400)
+          .json({ msg: "Number already exists", error: "number" });
       }
       if (password != confirmPassword) {
-        return res.status(400).json({ msg: "Passwords do no match" });
+        return res.status(400).json({
+          msg: "Password and confirm password should match",
+          error: "password",
+        });
       }
-      await ownerModel
-        .create({
-          name: username,
-          email: email,
-          number: number,
-          password: pwd,
-          confirmPassword: cpwd,
-        })
-        .then(res.json({ success: true }));
+      await ownerModel.create({
+        name: username,
+        email: email,
+        number: number,
+        password: pwd,
+        confirmPassword: cpwd,
+      });
+      const ownerAuthToken = jwt.sign({ ownerModel }, jwtSecret);
+      res.status(200).send({ success: true, ownerAuthToken });
     } catch (err) {
       console.log(err);
       return res.json({ success: false });
@@ -69,7 +77,7 @@ router.post(
 
     const errors = validationResult(req);
 
-    if (!errors) {
+    if (!errors.isEmpty()) {
       return res.status(400).json({ error: errors.array() });
     }
 
@@ -78,7 +86,7 @@ router.post(
       if (!ownerData) {
         return res
           .status(400)
-          .json({ error: "Please enter correct credentials" });
+          .json({ msg: "Please enter correct credentials", error: "email" });
       }
 
       const pwdCompare = await bcrypt.compare(
@@ -87,7 +95,9 @@ router.post(
       );
 
       if (!pwdCompare) {
-        return res.status(400).json({ error: "Enter correct credentials" });
+        return res
+          .status(400)
+          .json({ msg: "Enter correct credentials", error: "password" });
       } else {
         const data = {
           id: ownerData._id,

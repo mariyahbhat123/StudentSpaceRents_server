@@ -4,6 +4,7 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const adminModel = require("../Models/adminModel");
+const propertyDetail = require("../Models/propertyDetailsModel");
 const jwtSecretAdmin = "HELLOMYNAMEWISHEYYDH";
 
 router.post("/loginAdmin", async (req, res) => {

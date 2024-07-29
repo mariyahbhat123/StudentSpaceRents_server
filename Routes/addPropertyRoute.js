@@ -65,6 +65,7 @@ router.post(
         lng,
         forGender,
       } = req.body;
+      console.log("BODY", req.body);
       const { img0, img1, img2, img3 } = req.files;
       console.log(img0[0]);
 
@@ -102,6 +103,7 @@ router.post(
       return res.status(400).json({
         success: false,
         msg: false,
+        error: err,
       });
     }
   }
@@ -140,6 +142,32 @@ router.delete("/deleteProperty/:id", async (req, res) => {
     return res.status(200).json({ success: true });
   } catch (err) {
     res.send({ success: false, message: "Deleted Successfully" });
+  }
+});
+
+//Admin Updated Properties
+router.put("/editProperties/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+    const updated = {
+      district: req.body.district,
+      propertyType: req.body.propertyType,
+      address: req.body.address,
+    };
+
+    console.log(updated.address);
+    await propertyDetail.findByIdAndUpdate(id, {
+      district: updated.district,
+      address: updated.address,
+      propertyType: updated.propertyType,
+    });
+
+    res.send({ success: true });
+  } catch (error) {
+    return (
+      console.log(error), res.json({ msg: "Couldnt edit property", err: error })
+    );
   }
 });
 

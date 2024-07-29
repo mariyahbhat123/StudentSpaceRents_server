@@ -35,28 +35,31 @@ router.post(
       const existingEmail = await userModel.findOne({ email });
 
       if (existingEmail) {
-        return res
-          .status(400)
-          .json({ msg: "User with the same email already exists" });
-      }
-      if (password != confirmPassword) {
-        return res
-          .status(400)
-          .json(alert("Password and Confirm password should match"));
+        return res.status(400).json({
+          msg: "User with the same email already exists",
+          error: "emailExist",
+        });
       }
 
-      await userModel
-        .create({
-          name: req.body.name,
-          email: req.body.email,
-          gender: req.body.gender,
-          password: pwd,
-          confirmPassword: cpwd,
-        })
-        .then(res.json({ success: true }));
+      if (password != confirmPassword) {
+        return res.status(400).json({
+          msg: "Password and confirm password should match",
+          error: "password",
+        });
+      }
+
+      await userModel.create({
+        name: req.body.name,
+        email: req.body.email,
+        gender: req.body.gender,
+        password: pwd,
+        confirmPassword: cpwd,
+      });
+
+      const authToken = jwt.sign({ userModel }, jwtSecret);
+      res.status(200).send({ success: true, token: authToken });
     } catch (error) {
-      console.log(error);
-      res.json({ success: false });
+      return res.json({ success: false });
     }
   }
 );
@@ -79,9 +82,10 @@ router.post(
       let userData = await userModel.findOne({ email });
       console.log(userData);
       if (!userData) {
-        return res
-          .status(400)
-          .json({ error: "Try logging with correct credentials" });
+        return res.status(400).json({
+          msg: "Try logging with correct credentials",
+          error: "email",
+        });
       }
 
       const pwdCompare = await bcrypt.compare(
@@ -90,9 +94,10 @@ router.post(
       );
 
       if (!pwdCompare) {
-        return res
-          .status(400)
-          .json({ error: "Try logging with correct credentials" });
+        return res.status(400).json({
+          msg: "Try logging with correct credentials",
+          error: "password",
+        });
       } else {
         const data = {
           users: {
@@ -112,7 +117,7 @@ router.post(
       }
     } catch (err) {
       console.log(err);
-      res.json({ success: false });
+      res.json({ success: false, error: err });
     }
   }
 );

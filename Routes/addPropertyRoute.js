@@ -99,6 +99,10 @@ router.post(
         description: description,
         for: forGender,
       });
+
+      res.status(300).json({
+        success: true,
+      });
     } catch (err) {
       return res.status(400).json({
         success: false,

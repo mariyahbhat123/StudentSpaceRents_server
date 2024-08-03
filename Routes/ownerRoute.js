@@ -60,7 +60,7 @@ router.post(
         password: pwd,
         confirmPassword: cpwd,
       });
-      const ownerAuthToken = jwt.sign({ ownerModel }, jwtSecret);
+      const ownerAuthToken = jwt.sign({ ownerModel }, jwtSecretOwner);
       res.status(200).send({ success: true, ownerAuthToken });
     } catch (err) {
       console.log(err);
